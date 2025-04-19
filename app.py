@@ -12,10 +12,10 @@ import io
 app = Flask(__name__)
 
 # Add yolov5 repo path to sys.path
-sys.path.append('yolov5')  # assumes yolov5 folder is in same directory
+sys.path.append('yolov5')  # assumes yolov5 folder is in the same directory
 
 # Import YOLOv5 utils
-from models.experimental import attempt_load
+from yolov5.models.experimental import attempt_load  # Corrected path
 
 # 🔽 Function to download model from Google Drive
 def download_model_from_drive():
@@ -31,7 +31,7 @@ download_model_from_drive()
 
 # 🔌 Load model
 try:
-    model = attempt_load('yolov5/best.pt', map_location=torch.device('cpu'))  # or 'cuda'
+    model = attempt_load('yolov5_backup/runs/train/exp/weights/best.pt', map_location=torch.device('cpu'))  # or 'cuda'
     model.eval()
     print("✅ Model loaded successfully")
 except Exception as e:
