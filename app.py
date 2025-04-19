@@ -20,7 +20,7 @@ from models.experimental import attempt_load
 # 🔽 Function to download model from Google Drive
 def download_model_from_drive():
     import gdown
-    model_path = 'yolov5/best.pt'
+    model_path = 'yolov5_backup/runs/train/exp/weights/best.pt'
     if not os.path.exists(model_path):
         print("📥 Downloading model from Google Drive...")
         url = "https://drive.google.com/uc?id=1iNWK4mrfZXpXU6-C4u89afgK0aqAp4CJ"
