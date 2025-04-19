@@ -9,11 +9,12 @@ import cv2
 
 app = Flask(__name__)
 
-# Load model locally
+# Load model using torch.hub (recommended way for YOLOv5 custom models)
 try:
-    model_path = os.getenv('MODEL_PATH', 'best.pt')  # path to model in your GitHub repository or Render's storage
-    model = torch.load(model_path)
+    model_path = os.getenv('MODEL_PATH', 'best.pt')
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path, force_reload=False)
     model.eval()
+    print("✅ Model loaded successfully")
 except Exception as e:
     print(f"❌ Model load failed: {e}")
 
@@ -26,6 +27,7 @@ try:
             'harmful': int(row['Harmful'])
         } for _, row in class_map.iterrows()
     }
+    print("✅ Class mapping loaded")
 except Exception as e:
     print(f"❌ Class mapping load failed: {e}")
     class_dict = {}
@@ -67,5 +69,5 @@ def predict():
     })
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # ← this line is critical for Render!
+    port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
