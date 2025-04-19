@@ -1,6 +1,6 @@
 flask
 torch
-pillow
+Pillow
 opencv-python-headless
 pandas
 pyyaml
