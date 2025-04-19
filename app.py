@@ -5,17 +5,23 @@ import torch
 import pandas as pd
 import base64
 import cv2
-import numpy as np
 
 app = Flask(__name__)
 
-# Load YOLOv5 model
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=True)
-model.eval()
+# Load model
+try:
+    model = torch.load('best.pt', map_location=torch.device('cpu'))['model'].float()
+    model.eval()
+except Exception as e:
+    print(f"❌ Model load failed: {e}")
 
-# Load class mapping CSV
-class_map = pd.read_csv('class_mapping.csv')
-class_dict = {row['code']: {'species': row['species'], 'harmful': row['harmful']} for _, row in class_map.iterrows()}
+# Load class mapping
+try:
+    class_map = pd.read_csv('class_mapping.csv')
+    class_dict = {row['code']: {'species': row['species'], 'harmful': row['harmful']} for _, row in class_map.iterrows()}
+except Exception as e:
+    print(f"❌ Class mapping load failed: {e}")
+    class_dict = {}
 
 @app.route("/")
 def home():
@@ -33,9 +39,7 @@ def predict():
     results = model(image)
     predictions = results.pandas().xyxy[0].to_dict(orient="records")
 
-    # Convert PIL to OpenCV image
-    image_cv2 = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
-    annotated_img = results.render()[0]
+    annotated_img = results.render()[0]  # Already BGR
     _, img_encoded = cv2.imencode('.jpg', annotated_img)
     annotated_base64 = base64.b64encode(img_encoded).decode('utf-8')
 
