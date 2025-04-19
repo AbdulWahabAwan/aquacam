@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 # Load model locally
 try:
-    model_path = os.getenv('MODEL_PATH', 'models/best.pt')  # path to model in your GitHub repository or Render's storage
+    model_path = os.getenv('MODEL_PATH', 'best.pt')  # path to model in your GitHub repository or Render's storage
     model = torch.load(model_path)
     model.eval()
 except Exception as e:
