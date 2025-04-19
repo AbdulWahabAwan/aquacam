@@ -1,0 +1,6 @@
+flask
+torch
+Pillow
+opencv-python-headless
+pandas
+pyyaml
