@@ -12,7 +12,7 @@ app = Flask(__name__)
 # === Load YOLOv5 Model using local repo ===
 try:
     model_path = os.getenv('MODEL_PATH', 'aquacam/best.pt')
-    model = torch.hub.load('yolov5', 'custom', path=model_path, source='local')
+    model = torch.hub.load('.', 'custom', path=model_path, source='local')
     model.eval()
 except Exception as e:
     print(f"❌ Model load failed: {e}")
