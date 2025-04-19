@@ -10,18 +10,25 @@ app = Flask(__name__)
 
 # Load model
 try:
-    model = torch.load('best.pt', map_location=torch.device('cpu'))['model'].float()
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=True)
     model.eval()
 except Exception as e:
     print(f"❌ Model load failed: {e}")
 
+
 # Load class mapping
 try:
     class_map = pd.read_csv('class_mapping.csv')
-    class_dict = {row['code']: {'species': row['species'], 'harmful': row['harmful']} for _, row in class_map.iterrows()}
+    class_dict = {
+        row['Folder Name']: {
+            'species': row['Class Name'],
+            'harmful': int(row['Harmful'])
+        } for _, row in class_map.iterrows()
+    }
 except Exception as e:
     print(f"❌ Class mapping load failed: {e}")
     class_dict = {}
+
 
 @app.route("/")
 def home():
