@@ -1,5 +1,0 @@
-flask
-torch
-pandas
-Pillow
-numpy
