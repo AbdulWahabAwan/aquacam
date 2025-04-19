@@ -1,20 +1,21 @@
+import os
+import torch
 from flask import Flask, request, jsonify
 from PIL import Image
 import io
-import torch
 import pandas as pd
 import base64
 import cv2
 
 app = Flask(__name__)
 
-# Load model
+# Load model locally
 try:
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=True)
+    model_path = os.getenv('MODEL_PATH', 'models/best.pt')  # path to model in your GitHub repository or Render's storage
+    model = torch.load(model_path)
     model.eval()
 except Exception as e:
     print(f"❌ Model load failed: {e}")
-
 
 # Load class mapping
 try:
@@ -28,7 +29,6 @@ try:
 except Exception as e:
     print(f"❌ Class mapping load failed: {e}")
     class_dict = {}
-
 
 @app.route("/")
 def home():
