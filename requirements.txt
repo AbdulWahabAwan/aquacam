@@ -4,3 +4,5 @@ Pillow
 opencv-python-headless
 pandas
 pyyaml
+requests
+numpy
