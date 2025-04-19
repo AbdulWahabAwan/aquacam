@@ -9,15 +9,15 @@ import cv2
 
 app = Flask(__name__)
 
-# Load model locally
+# === Load YOLOv5 Model using local repo ===
 try:
-    model_path = os.getenv('MODEL_PATH', 'models/best.pt')  # path to model in your GitHub repository or Render's storage
-    model = torch.load(model_path)
+    model_path = os.getenv('MODEL_PATH', 'aquacam/best.pt')
+    model = torch.hub.load('yolov5', 'custom', path=model_path, source='local')
     model.eval()
 except Exception as e:
     print(f"❌ Model load failed: {e}")
 
-# Load class mapping
+# === Load class mapping ===
 try:
     class_map = pd.read_csv('class_mapping.csv')
     class_dict = {
@@ -67,5 +67,5 @@ def predict():
     })
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # ← this line is critical for Render!
+    port = int(os.environ.get("PORT", 5000))  # Render uses this port
     app.run(host="0.0.0.0", port=port)
