@@ -4,6 +4,8 @@ import io
 import torch
 import pandas as pd
 import base64
+import cv2
+import numpy as np
 
 app = Flask(__name__)
 
@@ -31,6 +33,8 @@ def predict():
     results = model(image)
     predictions = results.pandas().xyxy[0].to_dict(orient="records")
 
+    # Convert PIL to OpenCV image
+    image_cv2 = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
     annotated_img = results.render()[0]
     _, img_encoded = cv2.imencode('.jpg', annotated_img)
     annotated_base64 = base64.b64encode(img_encoded).decode('utf-8')
@@ -50,3 +54,6 @@ def predict():
         "annotated_image_base64": annotated_base64,
         "report": report
     })
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=10000)
