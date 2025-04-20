@@ -9,13 +9,15 @@ import cv2
 
 app = Flask(__name__)
 
-# === Load YOLOv5 Model using local repo ===
-try:
-    model_path = os.getenv('MODEL_PATH', 'aquacam/best.pt')
-    model = torch.hub.load('.', 'custom', path=model_path, source='local')
-    model.eval()
-except Exception as e:
-    print(f"❌ Model load failed: {e}")
+model_path = torch.hub.load(".", "custom", path="aquacam/best.pt")  # local model
+model = torch.hub.load(".", "custom", path=model_path, source="local")  # local repo
+# # === Load YOLOv5 Model using local repo ===
+# try:
+#     model_path = os.getenv('MODEL_PATH', 'aquacam/best.pt')
+#     model = torch.hub.load('.', 'custom', path=model_path, source='local')
+#     model.eval()
+# except Exception as e:
+#     print(f"❌ Model load failed: {e}")
 
 # === Load class mapping ===
 try:
