@@ -14,7 +14,7 @@ CORS(app)
 # === Load YOLOv5 Model ===
 try:
     model_path = "aquacam/best.pt"
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path, source='github')
+    model = torch.hub.load('yolov5', 'custom', path=model_path, source='local')  # Use local repo
     model.eval()
 except Exception as e:
     print(f"❌ Model load failed: {e}")
@@ -50,7 +50,7 @@ def predict():
     results = model(image)
     predictions = results.pandas().xyxy[0].to_dict(orient="records")
 
-    annotated_img = results.render()[0]  # Already BGR
+    annotated_img = results.render()[0]
     _, img_encoded = cv2.imencode('.jpg', annotated_img)
     annotated_base64 = base64.b64encode(img_encoded).decode('utf-8')
 
