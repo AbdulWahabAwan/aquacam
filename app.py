@@ -25,7 +25,7 @@ try:
         print(f"⚠️ Model file not found at: {model_path}")
         # You might want to add a fallback here or exit gracefully
     
-    model = torch.hub.load('yolov5', 'custom', path=model_path, source='local')
+    model = torch.hub.load('yolov5', 'custom', path=model_path, source='local',force_reload=True)
     model.eval()
     print("✅ Model loaded successfully!")
 except Exception as e:
