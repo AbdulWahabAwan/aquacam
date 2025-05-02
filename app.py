@@ -14,7 +14,7 @@ CORS(app)
 # === Load YOLOv5 Model ===
 try:
     model_path = "aquacam/best.pt"
-    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path, source='local')
+    model = torch.hub.load('ultralytics/yolov5', 'custom', path=model_path, source='github')
     model.eval()
 except Exception as e:
     print(f"❌ Model load failed: {e}")
