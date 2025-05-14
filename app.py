@@ -3,11 +3,20 @@ import torch
 import io
 from PIL import Image
 import base64
+import os
 
 app = Flask(__name__)
 
-# Load model via torch.hub
-model = torch.hub.load('ultralytics/yolov5', 'custom', path='best.pt', force_reload=False)
+# Force hub cache to be in local dir (avoids using system path with OpenCV issue)
+torch.hub.set_dir('./torch_cache')
+
+# Load YOLOv5 model
+model = torch.hub.load(
+    'ultralytics/yolov5',
+    'custom',
+    path='best.pt',
+    force_reload=True  # ensure a clean download
+)
 model.eval()
 
 @app.route('/')
